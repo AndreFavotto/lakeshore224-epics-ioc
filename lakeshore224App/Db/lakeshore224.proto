@@ -1,0 +1,93 @@
+##################################################
+# Protocol file for Lakeshore 224
+# Based on protocol file for Lakeshore 336 from Diamond Light Source
+#
+##################################################
+#INPUTS:A, B, C1-C5, D1-D5
+##################################################
+
+# General Settings
+##################################################
+
+Terminator = "\r\n";
+ReplyTimeout = 1000;
+
+##################################################
+
+# /// Read the device ID
+getID {
+   out "*IDN?";
+   in "LSCI,%s";
+}
+
+# /// Read the model number
+getMODEL {
+   in "LSCI,%8c,%*15c,%*s";
+}
+
+# /// Read the serial number
+getSERIAL {
+   in "LSCI,%*8c,%15c,%*s";
+}
+
+# /// Read the device firmware number
+getFIRMWARE {
+   in "LSCI,%*8c,%*15c,%s";
+}
+
+# /// Read the temperature in kelvin for inputs
+getKRDG {
+   out "KRDG? \$1";
+   in "%f";
+}
+
+# /// Read the voltage input for inputs
+getSRDG {
+   out "SRDG? \$1";
+   in "%f";
+}
+
+# /// Read the input sensor name
+getINNAME {
+   out "INNAME? \$1";
+   in "%#s";
+}
+
+# /// Read the alarm status
+# /// The first param is the input number, the second is the alarm low record.
+getALARMST {
+   out "ALARMST? \$1";
+   in "%d,%(\$2)d"
+}
+
+# /// Read the alarm params. I put the ends of the PV names here
+# /// to make the initial record INP link short.
+getALARM {
+   out "ALARM? \$1";
+   in "%(\$2_ONOFF)d,%(\$2_HIGHVAL)f,%(\$2_LOWVAL)f,%(\$2_DB)f,%(\$2_LE)d,%(\$2_AU)d,%(\$2_VIS)d"
+}
+
+# /// Read the input reading status
+getRDGST {
+   out "RDGST? \$1";
+   in "%d"
+}
+
+# /// Read the input curve number
+getINCRV {
+   out "INCRV? \$1";
+   in "%d"
+}
+
+# /// Read the input type params. I put the ends of the PV names here
+# /// to make the initial record INP link short.
+getINTYPE {
+   out "INTYPE? \$1";
+   in "%(\$2_S)d,%(\$2_AR)d,%(\$2_R)d,%(\$2_C)d,%(\$2_U)d"
+}
+
+# /// Set the input sensor name
+setINNAME {
+  out "INNAME \$1,\"%s\"";
+  @init { getINNAME; }
+}

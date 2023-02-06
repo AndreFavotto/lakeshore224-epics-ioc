@@ -1,0 +1,39 @@
+##################################################
+# DB file for Lakeshore 224
+##################################################
+#macros: 
+#DEVICE: Device name (PV prefix)
+#INPUTS ={A, B, C1-C5, D1-D5} 
+#PORT = communication bus ID
+##################################################
+
+record(stringin, "$(DEVICE):ID") {
+    field(DESC, "get device ID")
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore224.proto getID $(PORT)")
+}
+
+record(stringin, "$(DEVICE):Model") {
+    field(DESC, "get device ID")
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore224.proto getMODEL $(PORT)")
+}
+
+record(stringin, "$(DEVICE):SerNumb") {
+    field(DESC, "get device ID")
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore224.proto getSERIAL $(PORT)")
+}
+
+record(stringin, "$(DEVICE):FirmwareVersion") {
+    field(DESC, "get device ID")
+    field(DTYP, "stream")
+    field(INP,  "@lakeshore224.proto getFIRMWARE $(PORT)")
+}
+
+record(ai, "$(DEVICE):$(INPUT):Temp-Mon") {
+    field(DESC, "description")
+    field(DTYP, "stream")
+    field(SCAN, ".1 second")
+    field(INP,  "@lakeshore224.proto getKRDG($(INPUT)) $(PORT)")
+}
