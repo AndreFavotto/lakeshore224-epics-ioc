@@ -16,5 +16,6 @@ include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 
-DB += lakeshore224.db
-DB += lakeshore224.proto
+DB += ls224.db
+DB += ls224alarms.db
+DB += ls224.proto

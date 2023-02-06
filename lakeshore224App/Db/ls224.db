@@ -1,0 +1,62 @@
+##################################################
+# DB file for Lakeshore 224 general info
+##################################################
+#macros: 
+#DEVICE: Device name (PV prefix)
+#INPUTS ={A, B, C1-C5, D1-D5} 
+#PORT = communication bus ID
+##################################################
+
+record(stringin, "$(DEVICE):ID") {
+    field(DESC, "get device ID")
+    field(DTYP, "stream")
+    field(INP,  "@ls224.proto getID $(PORT)")
+}
+
+record(stringin, "$(DEVICE):Model") {
+    field(DESC, "get device model")
+    field(DTYP, "stream")
+    field(INP,  "@ls224.proto getMODEL $(PORT)")
+}
+
+record(stringin, "$(DEVICE):SerNumb") {
+    field(DESC, "get device serial number")
+    field(DTYP, "stream")
+    field(INP,  "@ls224.proto getSERIAL $(PORT)")
+}
+
+record(stringin, "$(DEVICE):FirmwareVersion") {
+    field(DESC, "get device firmware version")
+    field(DTYP, "stream")
+    field(INP,  "@ls224.proto getFIRMWARE $(PORT)")
+}
+
+#Per-Channel general readings
+
+record(stringin, "$(DEVICE):$(INPUT):Name-RB") {
+    field(DESC, "get device input $(INPUT) sensor name")
+    field(DTYP, "stream")
+    field(INP,  "@ls224.proto getINNAME($(INPUT)) $(PORT)")
+}
+
+record(stringout, "$(DEVICE):$(INPUT):Name") {
+    field(DESC, "set device input $(INPUT) sensor name")
+    field(DTYP, "stream")
+    field(OUT,  "@ls224.proto setINNAME($(INPUT)) $(PORT)")
+}
+
+record(ai, "$(DEVICE):$(INPUT):Temp-Mon") {
+    field(DESC, "get temperature $(INPUT) reading")
+    field(EGU, "K")
+    field(DTYP, "stream")
+    field(SCAN, ".1 second")
+    field(INP,  "@ls224.proto getKRDG($(INPUT)) $(PORT)")
+}
+
+record(ai, "$(DEVICE):$(INPUT):InputVoltage-Mon") {
+  field(DTYP, "stream")
+  field(INP, "@ls224.proto getSRDG($(INPUT)) $(PORT)")
+  field(SCAN, "1 second")
+  field(EGU, "V")
+}
+

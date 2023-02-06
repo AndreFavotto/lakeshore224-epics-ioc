@@ -1,0 +1,80 @@
+#######################################################
+# DB file for Lakeshore 224 Alarms
+# Reading strategy adapted from Lakeshore 336 IOC, by Matt Pearson - DLS
+#####################################################
+#macros: 
+#DEVICE: Device name (PV prefix)
+#INPUTS ={A, B, C1-C5, D1-D5} 
+#PORT = communication bus ID
+######################################################
+
+## NOTE: the last part of the record name is hard coded into protocol file. 
+
+##################### READING ########################
+# Alarm reading trigger
+record(stringin, "$(DEVICE):Alarm$(INPUT)-RB") {
+  field(DESC, "Read Alarm Params")
+  field(DTYP, "stream")
+  field(INP, "@ls224.proto getAlarm($(INPUT),$(DEVICE):Alarm$(INPUT)) $(PORT)")
+  field(SCAN, "1 second")
+}
+## Read the rest of the Alarm params. Values are set by previous record's input
+
+record(bi, "$(DEVICE):Alarm$(INPUT):OnOff-RB") {
+  field(DESC, "Alarm Enabled")
+  field(ZNAM, "Disabled")
+  field(ONAM, "Enabled")
+}
+record(ai, "$(DEVICE):Alarm$(INPUT):HighVal-RB") {
+  field(DESC, "Alarm High Value")
+}
+record(ai, "$(DEVICE):Alarm$(INPUT):LowVal-RB") {
+  field(DESC, "Alarm Low Value")
+}
+record(ai, "$(DEVICE):Alarm$(INPUT):DeadBand-RB") {
+  field(DESC, "Alarm Deadband")
+}
+record(bi, "$(DEVICE):Alarm$(INPUT):LE-RB") {
+  field(DESC, "Alarm Latch Enable")
+  field(ZNAM, "Non Latching")
+  field(ONAM, "Latching")
+}
+record(bi, "$(DEVICE):Alarm$(INPUT):Audible-RB") {
+  field(DESC, "Alarm Audible through internal speaker")
+  field(ZNAM, "Quiet")
+  field(ONAM, "Audible")
+}
+record(bi, "$(DEVICE):Alarm$(INPUT):Visible-RB") {
+  field(DESC, "Alarm visible through front panel led")
+  field(ZNAM, "Non Visible")
+  field(ONAM, "Visible")
+}
+
+###################### WRITING ########################
+
+record(bo, "$(DEVICE):Alarm$(INPUT):OnOff") {
+  field(DESC, "Enable or disable alarm")
+}
+record(ao, "$(DEVICE):Alarm$(INPUT):HighVal") {
+  field(DESC, "Set Alarm High Value")
+}
+record(ao, "$(DEVICE):Alarm$(INPUT):LowVal") {
+  field(DESC, "Set Alarm Low Value")
+}
+record(ao, "$(DEVICE):Alarm$(INPUT):DeadBand") {
+  field(DESC, "Set Alarm Deadband")
+}
+record(bo, "$(DEVICE):Alarm$(INPUT):LE") {
+  field(DESC, "Set Alarm Latch Enable")
+}
+record(bo, "$(DEVICE):Alarm$(INPUT):Audible") {
+  field(DESC, "Define if alarm is audible through internal speaker")
+}
+record(bo, "$(DEVICE):Alarm$(INPUT):Visible") {
+  field(DESC, "Define if alarm is visible through front panel led")
+}
+
+record(bo, "$(DEVICE):Alarm$(INPUT)") {
+    field(DESC, "Set all alarms defined above")
+    field(OUT,  "@ls224.proto setAlarm($(INPUT),$(DEVICE):Alarm$(INPUT)) $(PORT)")
+}
