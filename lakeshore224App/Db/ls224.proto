@@ -14,26 +14,16 @@ ReplyTimeout = 1000;
 
 ##################################################
 
-# /// Read the device ID
+@init{getALARM;}
+
+# Identification
 getID {
    out "*IDN?";
    in "LSCI,%s";
 }
-
-# /// Read the model number
-getMODEL {
-   in "LSCI,%8c,%*15c,%*s";
-}
-
-# /// Read the serial number
-getSERIAL {
-   in "LSCI,%*8c,%15c,%*s";
-}
-
-# /// Read the device firmware number
-getFIRMWARE {
-   in "LSCI,%*8c,%*15c,%s";
-}
+getMODEL {in "LSCI,%8c,%*15c,%*s";}
+getSERIAL {in "LSCI,%*8c,%15c,%*s";}
+getFIRMWARE {in "LSCI,%*8c,%*15c,%s";}
 
 # /// Read the temperature in kelvin for inputs
 getKRDG {
@@ -60,35 +50,54 @@ getALARMST {
    in "%d,%(\$2)d";
 }
 
-# /// Read the alarm params. I put the ends of the PV names here
+# /// Read the alarm params. The ends of the PV names were put here
 # /// to make the initial record INP link short.
 getALARM {
    out "ALARM? \$1";
-   in "%(\$2:OnOff-RB)d,%(\$2:HighVal-RB)f,%(\$2:LowVal-RB)f,%(\$2:DeadBand-RB)f,%(\$2:LE-RB)d,%(\$2:Sound-RB)d,%(\$2:Visible-RB)d";
+   in "%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";
 }
 
-setALARM{
-   out "ALARM \$1,%(\$2:OnOff)d,%(\$2:HighVal)f,%(\$2:LowVal)f,%(\$2:DeadBand)f,%(\$2:LE)d,%(\$2:Sound)d,%(\$2:Visible)d";
+getRELAY {
+   out "RELAY? \$1";
+   in "%(\$2Mode-Sts)d,%(\$2InputTrig-Sts)s,%(\$2AlarmType-Sts)d";
 }
 
-# /// Read the input reading status
-getRDGST {
-   out "RDGST? \$1";
-   in "%d";
-}
+# # /// Read the input reading status
+# getRDGST { 
+#    out "RDGST? \$1";
+#    in "%d";
+# }
 
-# /// Read the input curve number
-getINCRV {
-   out "INCRV? \$1";
-   in "%d";
-}
+# # /// Read the input curve number
+# getINCRV { 
+#    out "INCRV? \$1";
+#    in "%d";
+# }
 
-# /// Read the input type params. The ends of the PV names were put here
-# /// to make the initial record INP link short.
-getINTYPE {
-   out "INTYPE? \$1";
-   in "%(\$2:S)d,%(\$2:AR)d,%(\$2:R)d,%(\$2:C)d,%(\$2:U)d";
-}
+# # /// Read the input type params. The ends of the PV names were put here
+# # /// to make the initial record INP link short.
+# getINTYPE { 
+#    out "INTYPE? \$1";
+#    in "%(\$2S)d,%(\$2AR)d,%(\$2R)d,%(\$2C)d,%(\$2U)d";
+# }
+####################################################################
+
+# Setting Alarm parameters
+
+## Allow setting alarm parameters one by one (as the others are required, get them from the readbacks)
+setAlarmOnOff        {out "ALARM \$1,%(\$2OnOff-Cmd)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
+setAlarmHighVal      {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-SP)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
+setAlarmLowVal       {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-SP)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
+setAlarmDeadBand     {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
+setAlarmLatchEnable  {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-Cmd)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
+setAlarmAudible      {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-Cmd)d,%(\$2Visible-RB)d";}
+setAlarmVisible      {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-Cmd)d";}
+
+# Setting Relay parameters
+
+setRelayMode         {out "RELAY \$1 %(\$2Mode-Sel)d,%(\$2InputTrig-Sts)s,%(\$2AlarmType-Sts)d";}
+setRelayInputTrigger {out "RELAY \$1 %(\$2Mode-Sts)d,%(\$2InputTrig-Sel)s,%(\$2AlarmType-Sts)d";}
+setRelayAlarmType    {out "RELAY \$1 %(\$2Mode-Sts)d,%(\$2InputTrig-Sts)s,%(\$2AlarmType-Sel)d";}
 
 # /// Set the input sensor name
 setINNAME {
