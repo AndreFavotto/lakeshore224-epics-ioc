@@ -26,8 +26,7 @@
 MODULES = /opt/epics-R3.16.2
 ASYN = $(MODULES)/asyn
 STREAM = $(MODULES)/StreamDevice
-CALC = $(MODULES)/calc
-AUTOSAVE = $(MODULES)/autosave-R5-10-2
+# AUTOSAVE = $(MODULES)/autosave-R5-10-2
 
 # If using the sequencer, point SNCSEQ at its top directory:
 #SNCSEQ = $(MODULES)/seq-ver
