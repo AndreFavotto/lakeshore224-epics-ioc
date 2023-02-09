@@ -75,7 +75,7 @@ record(bi, "$(DEVICE)$(INDEX)InpType-Sts") {
   field(DESC, "Read Input Type Params")
   field(DTYP, "stream")
   field(INP, "@ls224.proto getINTYPE($(INPUT),$(DEVICE)$(INDEX)InpType) $(PORT) $(ADDR)")
-  field(SCAN, "$(SCAN) second")
+  field(SCAN, ".1 second")
 }
 
 record(mbbi, "$(DEVICE)$(INDEX)InpTypeSensor-Sts") {
