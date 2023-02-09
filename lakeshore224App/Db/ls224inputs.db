@@ -1,0 +1,343 @@
+#######################################################
+# DB file for Lakeshore 224 Inputs
+# Adapted from Lakeshore 336 IOC, by Matt Pearson - DLS
+#####################################################
+#macros: 
+#DEVICE: Device name (PV prefix)
+#INPUTS ={A, B, C1-C5, D1-D5} 
+#PORT = communication bus ID
+######################################################
+
+################################# GENERAL #################################
+## NOTE: the last part of some records name are hard coded into protocol file. 
+
+record(stringin, "$(DEVICE)$(INPUT)Name-RB") {
+    field(DESC, "get device $(INPUT) sensor name")
+    field(DTYP, "stream")
+    field(SCAN, "10 second")
+    field(INP,  "@ls224.proto getINNAME($(INPUT)) $(PORT)")
+}
+
+record(stringout, "$(DEVICE)$(INPUT)Name-Cmd") {
+    field(DESC, "set input $(INPUT) sensor name")
+    field(DTYP, "stream")
+    field(OUT,  "@ls224.proto setINNAME($(INPUT)) $(PORT)")
+}
+
+record(ai, "$(DEVICE)$(INPUT)Temp-Mon") {
+    field(DESC, "get $(INPUT) temperature reading")
+    field(EGU, "K")
+    field(DTYP, "stream")
+    field(SCAN, ".1 second")
+    field(INP,  "@ls224.proto getKRDG($(INPUT)) $(PORT)")
+}
+
+record(ai, "$(DEVICE)$(INPUT)InpVolt-Mon") {
+    field(DESC, "get $(INPUT) input voltage")
+    field(DTYP, "stream")
+    field(INP, "@ls224.proto getSRDG($(INPUT)) $(PORT)")
+    field(SCAN, "1 second")
+    field(EGU, "V")
+}
+
+record(longin, "$(DEVICE)$(INDEX)InpCrv-Sts") {
+    field(DESC, "get curve number defined for $(INPUT) sensor")
+    field(DTYP, "stream")
+    field(SCAN, "10 second")  
+    field(INP, "@ls224.proto getINCRV($(INPUT)) $(PORT)")
+}
+
+# Reading status
+record(mbbi, "$(DEVICE)$(INPUT)Status-Mon") {
+  field(DTYP, "stream")
+  field(ZRST, "Valid")
+  field(ZRVL, "0")
+  field(ONST, "Invalid")
+  field(ONVL, "1")
+  field(TWST, "Temp Under")
+  field(TWVL, "16")
+  field(THST, "Temp Over")
+  field(THVL, "32")
+  field(FRST, "Sensor Zero")
+  field(FRVL, "64")
+  field(FVST, "Sensor Over")
+  field(FVVL, "128")
+  field(ONSV, "MAJOR")
+  field(TWSV, "MAJOR")
+  field(THSV, "MAJOR")
+  field(FRSV, "MAJOR")
+  field(FVSV, "MAJOR")
+  field(SCAN, ".1 second")  
+  field(INP, "@ls244.proto getRDGST($(INPUT)) $(PORT)")
+}
+
+record(bi, "$(DEVICE)$(INDEX)InpType-Sts") {
+  field(DESC, "Read Input Type Params")
+  field(DTYP, "stream")
+  field(INP, "@ls224.proto getINTYPE($(INPUT),$(DEVICE)$(INDEX)InpType) $(PORT) $(ADDR)")
+  field(SCAN, "$(SCAN) second")
+}
+
+record(mbbi, "$(DEVICE)$(INDEX)InpTypeSensor-Sts") {
+  field(DESC, "Sensor Type")
+  field(ZRST, "Disabled")
+  field(ZRVL, "0")
+  field(ONST, "Diode")
+  field(ONVL, "1")
+  field(TWST, "Platinum RTD")
+  field(TWVL, "2")
+  field(THST, "NTC RTD")
+  field(THVL, "3")
+  field(FRST, "Thermocouple")
+  field(FRVL, "4")
+  field(FVST, "Capacitance")
+  field(FVVL, "5")
+}
+record(bi, "$(DEVICE)$(INPUT)InpTypeAR-RB") {
+  field(DESC, "Auto Range")
+  field(ZNAM, "Off")
+  field(ONAM, "On")
+}
+record(mbbi, "$(DEVICE)$(INPUT)InpTypeRange-RB") {
+  field(DESC, "Range")
+  field(ZRST, "10 Ohm / 2.5V / 50mV")
+  field(ZRVL, "0")
+  field(ONST, "30 Ohm / 10V")
+  field(ONVL, "1")
+  field(TWST, "100 Ohm")
+  field(TWVL, "2")
+  field(THST, "300 Ohm")
+  field(THVL, "3")
+  field(FRST, "1 KOhm")
+  field(FRVL, "4")
+  field(FVST, "3 KOhm")
+  field(FVVL, "5")
+  field(SXST, "10 KOhm")
+  field(SXVL, "6")
+  field(SVST, "30 KOhm")
+  field(SVVL, "7")
+  field(EIST, "100 KOhm")
+  field(EIVL, "8")
+}
+record(bi, "$(DEVICE)$(INPUT)InpTypeCompens-RB") {
+  field(DESC, "Compensation")
+  field(ZNAM, "Off")
+  field(ONAM, "On")
+}
+record(mbbi, "$(DEVICE)$(INPUT)InpTypeEGU-RB") {
+  field(DESC, "Units")
+  field(ZRST, "None")
+  field(ZRVL, "0")
+  field(ONST, "Kelvin")
+  field(ONVL, "1")
+  field(TWST, "Celsius")
+  field(TWVL, "2")
+  field(THST, "Sensor")
+  field(THVL, "3")
+}
+
+################################# ALARMS #################################
+## NOTE: the last part of some records name are hard coded into protocol file. 
+
+# Alarm reading
+
+record(stringin, "$(DEVICE)$(INPUT)Alrm-RB") {
+  field(DESC, "Read Alarm Params")
+  field(DTYP, "stream")
+  field(INP, "@ls224.proto getALARM($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
+  field(SCAN, "1 second")
+}
+
+#The alarm reading records below are filled by protocol file
+record(bi, "$(DEVICE)$(INPUT)AlrmOnOff-RB") {
+  field(DESC, "Alarm Enabled")
+  field(ZNAM, "Disabled")
+  field(ONAM, "Enabled")
+}
+record(ai, "$(DEVICE)$(INPUT)AlrmHighVal-RB") {
+  field(DESC, "Alarm High Value")
+}
+record(ai, "$(DEVICE)$(INPUT)AlrmLowVal-RB") {
+  field(DESC, "Alarm Low Value")
+}
+record(ai, "$(DEVICE)$(INPUT)AlrmDeadBand-RB") {
+  field(DESC, "Alarm Deadband")
+}
+record(bi, "$(DEVICE)$(INPUT)AlrmLatchEnbl-RB") {
+  field(DESC, "Alarm Latch Enable")
+  field(ZNAM, "Non Latching")
+  field(ONAM, "Latching")
+}
+record(bi, "$(DEVICE)$(INPUT)AlrmAudible-RB") {
+  field(DESC, "Alarm Audible through internal speaker")
+  field(ZNAM, "Quiet")
+  field(ONAM, "Audible")
+}
+record(bi, "$(DEVICE)$(INPUT)AlrmVisible-RB") {
+  field(DESC, "Alarm visible through front panel led")
+  field(ZNAM, "Non Visible")
+  field(ONAM, "Visible")
+}
+
+# Alarm setting
+
+record(bo, "$(DEVICE)$(INPUT)AlrmOnOff-Cmd") {
+  field(DESC, "Enable or disable alarm")
+  field(OUT,  "@ls224.proto setAlarmOnOff($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
+}
+record(ao, "$(DEVICE)$(INPUT)AlrmHighVal-SP") {
+  field(DESC, "Set Alarm High Value")
+  field(OUT,  "@ls224.proto setAlarmHighVal($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
+}
+record(ao, "$(DEVICE)$(INPUT)AlrmLowVal-SP") {
+  field(DESC, "Set Alarm Low Value")
+  field(OUT,  "@ls224.proto setAlarmLowVal($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
+}
+record(ao, "$(DEVICE)$(INPUT)AlrmDeadBand-SP") {
+  field(DESC, "Set Alarm Deadband")
+  field(OUT,  "@ls224.proto setAlarmDeadBand($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
+}
+record(bo, "$(DEVICE)$(INPUT)AlrmLatchEnbl-Cmd") {
+  field(DESC, "Set Alarm Latch Enable")
+  field(OUT,  "@ls224.proto setAlarmLatchEnable($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
+}
+record(bo, "$(DEVICE)$(INPUT)AlrmAudible-Cmd") {
+  field(DESC, "Define if alarm is audible through internal speaker")
+  field(OUT,  "@ls224.proto setAlarmAudible($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
+}
+record(bo, "$(DEVICE)$(INPUT)AlrmVisible-Cmd") {
+  field(DESC, "Define if alarm is visible through front panel led")
+  field(OUT,  "@ls224.proto setAlarmVisible($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
+}
+
+# Alarm reset
+record(bo, "$(DEVICE)AlrmRst-Cmd") {
+    field(DESC, "Reset all alarms")
+    field(OUT,  "@ls224.proto cmdAlarmRst $(PORT)")
+}
+
+################################# RELAY 1 #################################
+
+# Relay reading
+record(stringin, "$(DEVICE)Relay1Status-Mon"){
+  field(DESC, "get relay 1 general status")
+  field(DTYP, "stream")
+  field(INP, "@ls224.proto getRelay(1, $(DEVICE)Relay1) $(PORT)")
+  field(SCAN, "1 second")
+}
+
+record(mbbi, "$(DEVICE)Relay1Mode-Sts") {
+  field(DESC, "get relay 1 operation mode")
+  field(ZRVL, "0")
+  field(ZRST, "Off")        
+  field(ONVL, "1")
+  field(ONST, "On")         
+  field(TWVL, "2")
+  field(TWST, "Alarms")         
+}
+
+record(stringin, "$(DEVICE)Relay1InpTrig-Sts") {
+  field(DESC, "get relay 1 input trigger")
+}
+
+record(mbbi, "$(DEVICE)Relay1AlrmType-Sts") {
+  field(DESC, "get alarm type that triggers relay")
+  field(ZRVL, "0")
+  field(ZRST, "Low alarm")        
+  field(ONVL, "1")
+  field(ONST, "High alarm")         
+  field(TWVL, "2")
+  field(TWST, "Both alarms")         
+}
+
+# Relay setting
+
+record(mbbo, "$(DEVICE)Relay1Mode-Sel") {
+  field(DESC, "set relay 1 operation mode")
+  field(OUT,  "@ls224.proto setRelayMode(1, $(DEVICE)Relay1) $(PORT)")         
+  field(ZRVL, "0")
+  field(ZRST, "Off")        
+  field(ONVL, "1")
+  field(ONST, "On")         
+  field(TWVL, "2")
+  field(TWST, "Alarms")
+}
+
+record(stringout, "$(DEVICE)Relay1InpTrig-Sel") {
+  field(DESC, "set relay 2 input trigger")
+  field(OUT,  "@ls224.proto setRelayInpTrigger(1, $(DEVICE)Relay1) $(PORT)")
+}
+
+record(mbbo, "$(DEVICE)Relay1AlrmType-Sel") {
+  field(DESC, "set relay 1 alarm type")
+  field(OUT,  "@ls224.proto setRelayMode(1, $(DEVICE)Relay1) $(PORT)")         
+  field(ZRVL, "0")
+  field(ZRST, "Low alarm")        
+  field(ONVL, "1")
+  field(ONST, "High alarm")         
+  field(TWVL, "2")
+  field(TWST, "Both alarms")
+}
+
+################################# RELAY 2 #################################
+
+# Relay reading
+record(stringin, "$(DEVICE)Relay2Status-Mon"){
+  field(DESC, "get relay 2 general status")
+  field(DTYP, "stream")
+  field(INP, "@ls224.proto getRelay(2, $(DEVICE)Relay2) $(PORT)")
+  field(SCAN, "1 second")
+}
+
+record(mbbi, "$(DEVICE)Relay2Mode-Sts") {
+  field(DESC, "get relay 2 operation mode")
+  field(ZRVL, "0")
+  field(ZRST, "Off")        
+  field(ONVL, "1")
+  field(ONST, "On")         
+  field(TWVL, "2")
+  field(TWST, "Alarms")         
+}
+
+record(stringin, "$(DEVICE)Relay2InpTrig-Sts") {
+  field(DESC, "get relay 2 input trigger")
+}
+
+record(mbbi, "$(DEVICE)Relay2AlrmType-Sts") {
+  field(DESC, "get alarm type that triggers relay")
+  field(ZRVL, "0")
+  field(ZRST, "Low alarm")        
+  field(ONVL, "1")
+  field(ONST, "High alarm")         
+  field(TWVL, "2")
+  field(TWST, "Both alarms")         
+}
+
+# Relay setting
+
+record(mbbo, "$(DEVICE)Relay2Mode-Sts") {
+  field(DESC, "set relay 2 operation mode")
+  field(OUT,  "@ls224.proto setRelayMode(2, $(DEVICE)Relay2) $(PORT)")         
+  field(ZRVL, "0")
+  field(ZRST, "Off")        
+  field(ONVL, "1")
+  field(ONST, "On")         
+  field(TWVL, "2")
+  field(TWST, "Alarms")
+}
+
+record(stringout, "$(DEVICE)Relay2InpTrig-Sts") {
+  field(DESC, "set relay 2 input Trig")
+  field(OUT,  "@ls224.proto setRelayInpTrig(2, $(DEVICE)Relay2) $(PORT)")
+}
+
+record(mbbo, "$(DEVICE)Relay2AlarmType-Sts") {
+  field(DESC, "set relay 1 alarm type")
+  field(OUT,  "@ls224.proto setRelayMode(2, $(DEVICE)Relay2) $(PORT)")         
+  field(ZRVL, "0")
+  field(ZRST, "Low alarm")        
+  field(ONVL, "1")
+  field(ONST, "High alarm")         
+  field(TWVL, "2")
+  field(TWST, "Both alarms")
+}

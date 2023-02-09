@@ -3,7 +3,6 @@
 ##################################################
 #macros: 
 #DEVICE: Device name (PV prefix)
-#INPUTS ={A, B, C1-C5, D1-D5} 
 #PORT = communication bus ID
 ##################################################
 
@@ -30,34 +29,3 @@ record(stringin, "$(DEVICE)FirmwareVersion-RB") {
     field(DTYP, "stream")
     field(INP,  "@ls224.proto getFIRMWARE $(PORT)")
 }
-
-#Per-Channel general readings
-
-record(stringin, "$(DEVICE)$(INPUT)Name-RB") {
-    field(DESC, "get device $(INPUT) sensor name")
-    field(DTYP, "stream")
-    field(INP,  "@ls224.proto getINNAME($(INPUT)) $(PORT)")
-}
-
-record(stringout, "$(DEVICE)$(INPUT)Name") {
-    field(DESC, "set input $(INPUT) sensor name")
-    field(DTYP, "stream")
-    field(OUT,  "@ls224.proto setINNAME($(INPUT)) $(PORT)")
-}
-
-record(ai, "$(DEVICE)$(INPUT)Temp-Mon") {
-    field(DESC, "get $(INPUT) temperature reading")
-    field(EGU, "K")
-    field(DTYP, "stream")
-    field(SCAN, ".1 second")
-    field(INP,  "@ls224.proto getKRDG($(INPUT)) $(PORT)")
-}
-
-record(ai, "$(DEVICE)$(INPUT)InpVolt-Mon") {
-    field(DESC, "get $(INPUT) input voltage")
-    field(DTYP, "stream")
-    field(INP, "@ls224.proto getSRDG($(INPUT)) $(PORT)")
-    field(SCAN, "1 second")
-    field(EGU, "V")
-}
-

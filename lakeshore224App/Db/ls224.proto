@@ -13,8 +13,9 @@ Terminator = "\r\n";
 ReplyTimeout = 1000;
 
 ##################################################
-
-@init{getALARM;}
+#ensure remote operation and etherent interface communication
+@init{ out "MODE 1"
+       out "INTSEL 1"}
 
 # Identification
 getID {
@@ -43,12 +44,13 @@ getINNAME {
    in "%#s";
 }
 
-# /// Read the alarm status
-# /// The first param is the input number, the second is the alarm low record.
-getALARMST {
-   out "ALARMST? \$1";
-   in "%d,%(\$2)d";
-}
+
+# # /// Read the alarm status
+# # /// The first param is the input number, the second is the alarm low record.
+# getALARMST {
+#    out "ALARMST? \$1";
+#    in "%d,%(\$2)d";
+# }
 
 # /// Read the alarm params. The ends of the PV names were put here
 # /// to make the initial record INP link short.
@@ -62,33 +64,34 @@ getRELAY {
    in "%(\$2Mode-Sts)d,%(\$2InputTrig-Sts)s,%(\$2AlarmType-Sts)d";
 }
 
-# # /// Read the input reading status
-# getRDGST { 
-#    out "RDGST? \$1";
-#    in "%d";
-# }
+# /// Read the input reading status
+getRDGST { 
+   out "RDGST? \$1";
+   in "%d";
+}
 
-# # /// Read the input curve number
-# getINCRV { 
-#    out "INCRV? \$1";
-#    in "%d";
-# }
+# /// Read the input curve number
+getINCRV { 
+   out "INCRV? \$1";
+   in "%d";
+}
 
-# # /// Read the input type params. The ends of the PV names were put here
-# # /// to make the initial record INP link short.
-# getINTYPE { 
-#    out "INTYPE? \$1";
-#    in "%(\$2S)d,%(\$2AR)d,%(\$2R)d,%(\$2C)d,%(\$2U)d";
-# }
+# /// Read the input type params. The ends of the PV names were put here
+# /// to make the initial record INP link short.
+getINTYPE { 
+   out "INTYPE? \$1";
+   in "%(\$2Sensor-Sts)d,%(\$2AR-RB)d,%(\$2Range-RB)d,%(\$2Compens-RB)d,%(\$2EGU-RB)d";
+}
 ####################################################################
 
 # Setting Alarm parameters
+cmdAlarmRST          {out "ALARMRST";}
 
 ## Allow setting alarm parameters one by one (as the others are required, get them from the readbacks)
 setAlarmOnOff        {out "ALARM \$1,%(\$2OnOff-Cmd)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
 setAlarmHighVal      {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-SP)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
 setAlarmLowVal       {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-SP)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
-setAlarmDeadBand     {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
+setAlarmDeadBand     {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-SP)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
 setAlarmLatchEnable  {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-Cmd)d,%(\$2Audible-RB)d,%(\$2Visible-RB)d";}
 setAlarmAudible      {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-Cmd)d,%(\$2Visible-RB)d";}
 setAlarmVisible      {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowVal-RB)f,%(\$2DeadBand-RB)f,%(\$2LatchEnbl-RB)d,%(\$2Audible-RB)d,%(\$2Visible-Cmd)d";}
