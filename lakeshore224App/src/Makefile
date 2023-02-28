@@ -43,6 +43,7 @@ include $(TOP)/configure/RULES
 lakeshore224_DBD += stream.dbd
 lakeshore224_DBD += asyn.dbd
 lakeshore224_DBD += drvAsynSerialPort.dbd
+lakeshore224_DBD += drvAsynIPPort.dbd
 # lakeshore224_DBD += asSupport.dbd
 
 lakeshore224_LIBS += stream
