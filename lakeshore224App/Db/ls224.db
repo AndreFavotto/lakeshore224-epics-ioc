@@ -10,22 +10,26 @@ record(stringin, "$(DEVICE)ID-Cte") {
     field(DESC, "get device ID")
     field(DTYP, "stream")
     field(INP,  "@ls224.proto getID $(PORT)")
+    field(SCAN, "I/O Intr")
 }
 
 record(stringin, "$(DEVICE)Model-Cte") {
     field(DESC, "get device model")
     field(DTYP, "stream")
     field(INP,  "@ls224.proto getMODEL $(PORT)")
+    field(SCAN, "I/O Intr")
 }
 
 record(stringin, "$(DEVICE)SerNumb-Cte") {
     field(DESC, "get device serial number")
     field(DTYP, "stream")
     field(INP,  "@ls224.proto getSERIAL $(PORT)")
+    field(SCAN, "I/O Intr")
 }
 
 record(stringin, "$(DEVICE)FirmwareVersion-RB") {
     field(DESC, "get device firmware version")
     field(DTYP, "stream")
     field(INP,  "@ls224.proto getFIRMWARE $(PORT)")
+    field(SCAN, "I/O Intr")
 }

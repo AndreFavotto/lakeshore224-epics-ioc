@@ -40,7 +40,7 @@ record(ai, "$(DEVICE)$(INPUT)InpVolt-Mon") {
     field(EGU, "V")
 }
 
-record(longin, "$(DEVICE)$(INDEX)InpCrv-Sts") {
+record(longin, "$(DEVICE)$(INPUT)InpCrv-Sts") {
     field(DESC, "get curve number defined for $(INPUT) sensor")
     field(DTYP, "stream")
     field(SCAN, "10 second")  
@@ -68,17 +68,17 @@ record(mbbi, "$(DEVICE)$(INPUT)Status-Mon") {
   field(FRSV, "MAJOR")
   field(FVSV, "MAJOR")
   field(SCAN, ".1 second")  
-  field(INP, "@ls244.proto getRDGST($(INPUT)) $(PORT)")
+  field(INP, "@ls224.proto getRDGST($(INPUT)) $(PORT)")
 }
 
-record(bi, "$(DEVICE)$(INDEX)InpType-Sts") {
+record(bi, "$(DEVICE)$(INPUT)InpType-Sts") {
   field(DESC, "Read Input Type Params")
   field(DTYP, "stream")
-  field(INP, "@ls224.proto getINTYPE($(INPUT),$(DEVICE)$(INDEX)InpType) $(PORT) $(ADDR)")
+  field(INP, "@ls224.proto getINTYPE($(INPUT),$(DEVICE)$(INPUT)InpType) $(PORT)")
   field(SCAN, ".1 second")
 }
 
-record(mbbi, "$(DEVICE)$(INDEX)InpTypeSensor-Sts") {
+record(mbbi, "$(DEVICE)$(INPUT)InpTypeSensor-Sts") {
   field(DESC, "Sensor Type")
   field(ZRST, "Disabled")
   field(ZRVL, "0")
@@ -169,12 +169,12 @@ record(bi, "$(DEVICE)$(INPUT)AlrmLatchEnbl-RB") {
   field(ONAM, "Latching")
 }
 record(bi, "$(DEVICE)$(INPUT)AlrmAudible-RB") {
-  field(DESC, "Alarm Audible through internal speaker")
+  field(DESC, "Alarm audible through int. speaker")
   field(ZNAM, "Quiet")
   field(ONAM, "Audible")
 }
 record(bi, "$(DEVICE)$(INPUT)AlrmVisible-RB") {
-  field(DESC, "Alarm visible through front panel led")
+  field(DESC, "Alarm visible through front panel")
   field(ZNAM, "Non Visible")
   field(ONAM, "Visible")
 }
@@ -202,11 +202,11 @@ record(bo, "$(DEVICE)$(INPUT)AlrmLatchEnbl-Cmd") {
   field(OUT,  "@ls224.proto setAlarmLatchEnable($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
 }
 record(bo, "$(DEVICE)$(INPUT)AlrmAudible-Cmd") {
-  field(DESC, "Define if alarm is audible through internal speaker")
+  field(DESC, "Alarm audible through internal speaker")
   field(OUT,  "@ls224.proto setAlarmAudible($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
 }
 record(bo, "$(DEVICE)$(INPUT)AlrmVisible-Cmd") {
-  field(DESC, "Define if alarm is visible through front panel led")
+  field(DESC, "Alarm visible through front panel led")
   field(OUT,  "@ls224.proto setAlarmVisible($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
 }
 
@@ -315,7 +315,7 @@ record(mbbi, "$(DEVICE)Relay2AlrmType-Sts") {
 
 # Relay setting
 
-record(mbbo, "$(DEVICE)Relay2Mode-Sts") {
+record(mbbo, "$(DEVICE)Relay2Mode-Sel") {
   field(DESC, "set relay 2 operation mode")
   field(OUT,  "@ls224.proto setRelayMode(2, $(DEVICE)Relay2) $(PORT)")         
   field(ZRVL, "0")
@@ -326,12 +326,12 @@ record(mbbo, "$(DEVICE)Relay2Mode-Sts") {
   field(TWST, "Alarms")
 }
 
-record(stringout, "$(DEVICE)Relay2InpTrig-Sts") {
+record(stringout, "$(DEVICE)Relay2InpTrig-Sel") {
   field(DESC, "set relay 2 input Trig")
   field(OUT,  "@ls224.proto setRelayInpTrig(2, $(DEVICE)Relay2) $(PORT)")
 }
 
-record(mbbo, "$(DEVICE)Relay2AlarmType-Sts") {
+record(mbbo, "$(DEVICE)Relay2AlrmType-Sel") {
   field(DESC, "set relay 1 alarm type")
   field(OUT,  "@ls224.proto setRelayMode(2, $(DEVICE)Relay2) $(PORT)")         
   field(ZRVL, "0")

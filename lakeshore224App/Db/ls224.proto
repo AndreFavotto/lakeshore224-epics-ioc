@@ -14,8 +14,8 @@ ReplyTimeout = 1000;
 
 ##################################################
 #ensure remote operation and etherent interface communication
-@init{ out "MODE 1"
-       out "INTSEL 1"}
+# @init{ out "MODE 1"
+#        out "INTSEL 1"}
 
 # Identification
 getID {
@@ -61,7 +61,7 @@ getALARM {
 
 getRELAY {
    out "RELAY? \$1";
-   in "%(\$2Mode-Sts)d,%(\$2InputTrig-Sts)s,%(\$2AlarmType-Sts)d";
+   in "%(\$2Mode-Sts)d,%(\$2InpTrig-Sts)c,%(\$2AlrmType-Sts)d";
 }
 
 # /// Read the input reading status
@@ -98,12 +98,12 @@ setAlarmVisible      {out "ALARM \$1,%(\$2OnOff-RB)d,%(\$2HighVal-RB)f,%(\$2LowV
 
 # Setting Relay parameters
 
-setRelayMode         {out "RELAY \$1 %(\$2Mode-Sel)d,%(\$2InputTrig-Sts)s,%(\$2AlarmType-Sts)d";}
-setRelayInputTrigger {out "RELAY \$1 %(\$2Mode-Sts)d,%(\$2InputTrig-Sel)s,%(\$2AlarmType-Sts)d";}
-setRelayAlarmType    {out "RELAY \$1 %(\$2Mode-Sts)d,%(\$2InputTrig-Sts)s,%(\$2AlarmType-Sel)d";}
+setRelayMode         {out "RELAY \$1 %(\$2Mode-Sel)d,%(\$2InpTrig-Sts)s,%(\$2AlrmType-Sts)d";}
+setRelayInputTrigger {out "RELAY \$1 %(\$2Mode-Sts)d,%(\$2InpTrig-Sel)s,%(\$2AlrmType-Sts)d";}
+setRelayAlarmType    {out "RELAY \$1 %(\$2Mode-Sts)d,%(\$2InpTrig-Sts)s,%(\$2AlrmType-Sel)d";}
 
 # /// Set the input sensor name
 setINNAME {
   out "INNAME \$1,\"%s\"";
-  @init { getINNAME; }
+#   @init { getINNAME; }
 }
