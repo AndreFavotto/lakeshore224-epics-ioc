@@ -71,7 +71,7 @@ record(mbbi, "$(DEVICE)$(INPUT)Status-Mon") {
   field(INP, "@ls224.proto getRDGST($(INPUT)) $(PORT)")
 }
 
-record(bi, "$(DEVICE)$(INPUT)InpType-Sts") {
+record(bi, "$(DEVICE)$(INPUT)InpType") {
   field(DESC, "Read Input Type Params")
   field(DTYP, "stream")
   field(INP, "@ls224.proto getINTYPE($(INPUT),$(DEVICE)$(INPUT)InpType) $(PORT)")
@@ -141,7 +141,7 @@ record(mbbi, "$(DEVICE)$(INPUT)InpTypeEGU-RB") {
 
 # Alarm reading
 
-record(stringin, "$(DEVICE)$(INPUT)Alrm-RB") {
+record(stringin, "$(DEVICE)$(INPUT)Alrm") {
   field(DESC, "Read Alarm Params")
   field(DTYP, "stream")
   field(INP, "@ls224.proto getALARM($(INPUT),$(DEVICE)$(INPUT)Alrm) $(PORT)")
@@ -227,7 +227,7 @@ record(bo, "$(DEVICE)AlrmRst-Cmd") {
 ################################# RELAY 1 #################################
 
 # Relay reading
-record(stringin, "$(DEVICE)Relay1Status-Mon"){
+record(stringin, "$(DEVICE)Relay1Status"){
   field(DESC, "get relay 1 general status")
   field(DTYP, "stream")
   field(INP, "@ls224.proto getRelay(1, $(DEVICE)Relay1) $(PORT)")
